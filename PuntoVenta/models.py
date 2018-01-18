@@ -13,7 +13,7 @@ from django.db import models
 class PuntoventaCarrito(models.Model):
     id_carrito = models.AutoField(db_column='ID_CARRITO', primary_key=True)  # Field name made lowercase.
     id_venta = models.ForeignKey('PuntoventaVenta', models.DO_NOTHING, db_column='ID_VENTA')  # Field name made lowercase.
-    cantidad_producto = models.IntegerField(db_column='CANTIDAD_PRODUCTO')  # Field name made lowercase.
+    cantidad_producto = models.FloatField(db_column='CANTIDAD_PRODUCTO')  # Field name made lowercase.
     total = models.FloatField(db_column='TOTAL')  # Field name made lowercase.
     id_producto = models.ForeignKey('PuntoventaProducto', models.DO_NOTHING, db_column='ID_PRODUCTO')  # Field name made lowercase.
 
@@ -21,12 +21,15 @@ class PuntoventaCarrito(models.Model):
         managed = False
         db_table = 'PUNTOVENTA_CARRITO'
 
+    def __str__(self):
+        return str(self.id_carrito).encode('utf8')
 
 
 class PuntoventaCategoria(models.Model):
     id_categoria = models.AutoField(db_column='ID_CATEGORIA', primary_key=True)  # Field name made lowercase.
     nombre_categoria = models.CharField(db_column='NOMBRE_CATEGORIA', max_length=50, blank=True, null=True)  # Field name made lowercase.
     id_categoria_padre = models.ForeignKey('self', models.DO_NOTHING, db_column='ID_CATEGORIA_PADRE', blank=True, null=True)  # Field name made lowercase.
+    id_grupo = models.ForeignKey('PuntoventaGrupo', models.DO_NOTHING, db_column='ID_GRUPO', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -46,13 +49,23 @@ class PuntoventaCorteCaja(models.Model):
         db_table = 'PUNTOVENTA_CORTE_CAJA'
 
 
+class PuntoventaGrupo(models.Model):
+    id_grupo = models.AutoField(db_column='ID_GRUPO', primary_key=True)  # Field name made lowercase.
+    nombre_grupo = models.CharField(db_column='NOMBRE_GRUPO', max_length=50)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'PUNTOVENTA_GRUPO'
+
+
 class PuntoventaHistoriaInventario(models.Model):
     id_historia_inventario = models.AutoField(db_column='ID_HISTORIA_INVENTARIO', primary_key=True)  # Field name made lowercase.
-    fecha_registro = models.DateField(db_column='FECHA_REGISTRO')  # Field name made lowercase.
+    fecha_registro = models.DateTimeField(db_column='FECHA_REGISTRO')  # Field name made lowercase.
     id_producto = models.ForeignKey('PuntoventaProducto', models.DO_NOTHING, db_column='ID_PRODUCTO')  # Field name made lowercase.
-    cantidad_anterior = models.IntegerField(db_column='CANTIDAD_ANTERIOR')  # Field name made lowercase.
-    cantidad_adicionada = models.IntegerField(db_column='CANTIDAD_ADICIONADA')  # Field name made lowercase.
-    cantidad_nueva = models.IntegerField(db_column='CANTIDAD_NUEVA')  # Field name made lowercase.
+    cantidad_anterior = models.FloatField(db_column='CANTIDAD_ANTERIOR')  # Field name made lowercase.
+    cantidad_adicionada = models.FloatField(db_column='CANTIDAD_ADICIONADA')  # Field name made lowercase.
+    cantidad_nueva = models.FloatField(db_column='CANTIDAD_NUEVA')  # Field name made lowercase.
+    descripcion = models.CharField(db_column='DESCRIPCION', max_length=100, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -66,7 +79,7 @@ class PuntoventaProducto(models.Model):
     id_categoria = models.ForeignKey(PuntoventaCategoria, models.DO_NOTHING, db_column='ID_CATEGORIA', blank=True, null=True)  # Field name made lowercase.
     precio_venta = models.FloatField(db_column='PRECIO_VENTA', blank=True, null=True)  # Field name made lowercase.
     precio_compra = models.FloatField(db_column='PRECIO_COMPRA', blank=True, null=True)  # Field name made lowercase.
-    cantidad_disponible = models.IntegerField(db_column='CANTIDAD_DISPONIBLE', blank=True, null=True)  # Field name made lowercase.
+    cantidad_disponible = models.FloatField(db_column='CANTIDAD_DISPONIBLE', blank=True, null=True)  # Field name made lowercase.
     codigo_producto = models.CharField(db_column='CODIGO_PRODUCTO', max_length=50, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -79,7 +92,7 @@ class PuntoventaProducto(models.Model):
 
 class PuntoventaVenta(models.Model):
     id_venta = models.AutoField(db_column='ID_VENTA', primary_key=True)  # Field name made lowercase.
-    fecha_venta = models.DateField(db_column='FECHA_VENTA', blank=True, null=True)  # Field name made lowercase.
+    fecha_venta = models.DateTimeField(db_column='FECHA_VENTA', blank=True, null=True)  # Field name made lowercase.
     total_venta = models.FloatField(db_column='TOTAL_VENTA', blank=True, null=True)  # Field name made lowercase.
     pago_venta = models.FloatField(db_column='PAGO_VENTA', blank=True, null=True)  # Field name made lowercase.
     cambio_venta = models.FloatField(db_column='CAMBIO_VENTA', blank=True, null=True)  # Field name made lowercase.
@@ -88,3 +101,6 @@ class PuntoventaVenta(models.Model):
     class Meta:
         managed = False
         db_table = 'PUNTOVENTA_VENTA'
+
+    def __str__(self):
+        return str(self.id_venta).encode('utf8')

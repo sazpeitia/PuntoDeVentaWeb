@@ -14,37 +14,41 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- Top container -->
 <div class="w3-container w3-top w3-black w3-large w3-padding" style="z-index:4">
   <button class="w3-button w3-hide-large w3-padding-0 w3-black w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-right">AZPTEC COMPANY</span>
+  <span class="w3-right">AZPTEC COMPANY - PUNTO DE VENTA WEB</span>
 </div>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
     <div class="w3-col s4">
-      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+      <img class="w3-circle w3-margin-right" style="width:46px">
     </div>
     <div class="w3-col s8 w3-bar">
-      <span>Bienvenido, <strong>Usuer</strong></span><br>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+      <span>Bienvenido<strong><!--Usuer--></strong></span><br>
     </div>
   </div>
   <hr>
   <div class="w3-container">
-    <h5>Dashboard</h5>
+    <h6>NEGOCIOS</h6>
   </div>
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-laptop w3-red w3-padding-tiny"></i>  PAPELERIA</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Views</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Traffic</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Geo</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  Orders</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  News</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  General</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+
+
+    <!-- !PAPELERIA! -->
+    {% if negocio == 'PAPELERIA' %}
+    <a href="/azptec/PuntoVenta/negocios/PAPELERIA" class="w3-bar-item w3-button w3-padding w3-blue"></i>PAPELERIA AZPAPER</a>
+    {% else %}
+    <a href="/azptec/PuntoVenta/negocios/PAPELERIA" class="w3-bar-item w3-button w3-padding"></i>PAPELERIA AZPAPER</a>
+    {% endif %}
+
+    <!-- !FORRAJERA! -->
+    {% if negocio == 'FORRAJERA' %}
+    <a href="/azptec/PuntoVenta/negocios/FORRAJERA" class="w3-bar-item w3-button w3-padding w3-blue"></i>FORRAJERA PONI</a>
+    {% else %}
+    <a href="/azptec/PuntoVenta/negocios/FORRAJERA" class="w3-bar-item w3-button w3-padding"></i>FORRAJERA PONI</a>
+    {% endif %}
+
   </div>
 </nav>
 
@@ -55,29 +59,46 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
+  <!-- !MENU TIPO DE REPORTE! -->
+  <div class="w3-container w3-white w3-border">
+    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue">TOTAL VENTAS</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding w3-white">VENTAS DEL DIA</a>
+  </div>
+
+  <!-- CONFIGURAR REPORTE VENTA DEL DIA-->
+  <div class="w3-container">
+    <h5>SELECCIONE LA FECHA</h5>
+    <form action="/azptec/PuntoVenta/negocios/{{negocio}}/" method="post" >
+      {% csrf_token %}
+      <label for='fechaInicio'>Fecha inicio:</label>
+      <input type="date" name="fechaInicio" id='fechaInicio' value="{{fechaInicio}}">
+      <label for='fechaFin'>Fecha fin:</label>
+      <input type="date" name="fechaFin" id='fechaFin' value="{{fechaFin}}">
+      <input type="submit" value="Obtener reporte">
+    </form>
+  </div>
 
   <div class="w3-container">
     <h5>RESUMEN VENTAS DEL DIA  </h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-      <tr>
-        <th>FECHA</th>
-        <th>UNIDADES</th>
-        <th>CONCEPTO</th>
-        <th>COMPRA</th>
-        <th>VENTA</th>
-        <th>TOTAL VENTA</th>
-        <th>TOTAL GANANCIA</th>
-        <th>UNIDADES DISP</th>
+    <a id="loginLink" onclick="toggleTable();" href="#">Mostrar/Ocultar tabla</a>
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" id="loginTable">
+      <tr >
+        <th class="w3-border">FECHA</th>
+        <th class="w3-border">U</th>
+        <th class="w3-border">PRODUCTO</th>
+        <th class="w3-border">CATEGORIA</th>
+        <th class="w3-border">VENTA</th>
+        <th class="w3-border">TOTAL VENTA</th>
+        <th class="w3-border">UNIDADES DISP</th>
       </tr>
       {% for venta in ventas %}
       <tr>
          <td>{{ venta.id_venta.fecha_venta|date:"d/M/Y" }}</td>
          <td>{{venta.cantidad_producto}}</td>
          <td>{{venta.id_producto.nombre_producto}}</td>
-         <td>${{venta.id_producto.precio_compra}}</td>
+         <td>{{venta.id_producto.id_categoria.nombre_categoria}}</td>
          <td>${{venta.id_producto.precio_venta}}</td>
          <td>${{venta.total}}</td>
-         <td>${{venta.ganancia}}</td>
          <style>
             .td_cus {
               color:#FF0000  !important;
@@ -100,8 +121,22 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
       <div class="w3-third">
-        <h5>RESUMEN</h5>
+        <h5>POR CATEGORIA</h5>
 
+        <table class="w3-table w3-striped w3-white">
+          <tr>
+            <th>NOMBRE CATEGORIA</th>
+            <th>TOTAL VENTA</th>
+            <th>TOTAL GANANCIA</th>
+          </tr>
+          {% for categoria in categoriasGanancias %}
+            <tr>
+              <td>{{categoria.id_producto__id_categoria__nombre_categoria}}</td>
+              <td>{{categoria.total_venta}}</td>
+              <td>{{categoria.total_ganancia}}</td>
+            </tr>
+          {% endfor %}
+        </table>
       </div>
       <div class="w3-twothird">
         <h5>TOTAL VENTAS</h5>
@@ -127,7 +162,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <footer class="w3-container w3-padding-16 w3-light-grey">
     <h4>ACERCA DE</h4>
-    <p>Powered by <a href="mailto:sah070690@gmail.com" target="_blank">AZPTECT COMPANYS</a></p>
+    <p>Enviar mail a: <a href="mailto:sah070690@gmail.com" target="_blank">AZPTECT COMPANY</a></p>
   </footer>
 
   <!-- End page content -->
@@ -155,6 +190,11 @@ function w3_open() {
 function w3_close() {
     mySidebar.style.display = "none";
     overlayBg.style.display = "none";
+}
+
+function toggleTable() {
+    var lTable = document.getElementById("loginTable");
+    lTable.style.display = (lTable.style.display == "table") ? "none" : "table";
 }
 </script>
 

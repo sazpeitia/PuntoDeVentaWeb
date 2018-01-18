@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +78,10 @@ WSGI_APPLICATION = 'AzptecPuntoVenta.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'PUNTOVENTA',
+        'NAME' : 'PUNTOVENTA_V15',
         'USER': 'PUNTOVENTA',
         'PASSWORD': 'PUNTOVENTA',
-        'HOST': 'localhost',
+        'HOST': 'samy-latitud',
         'PORT' : '3306'
 
     }
@@ -117,7 +118,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# Se cambio a False debido a que no es compatible con DateTimeField en Mysql
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
