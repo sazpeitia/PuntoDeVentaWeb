@@ -10,7 +10,7 @@ from django.db.models.functions import (
 
 
 
-def reporte_general_porCategoria(request, negocio, reporte):
+def reportes_general_grupos(request, negocio, reporte):
 
     if (request.method == 'POST'):
         fechaInicio = request.POST['fechaInicio']
@@ -53,14 +53,25 @@ def reporte_general_porCategoria(request, negocio, reporte):
         )
     ).order_by('-dayGrouped', '-total_ganancia')
 
-
+    # Query para obtener el total de ventas y ganancia de todo
+    ventaGanancia = PuntoventaCarrito.objects.filter(
+        id_venta__fecha_venta__range=[fechaInicioRange,fechaFinRange]
+    ).aggregate(
+        total_ganancia=Sum(
+            F('cantidad_producto')*(F('id_producto__precio_venta')-F('id_producto__precio_compra')), output_field=FloatField()
+        ),
+        total_venta=Sum(
+            F('cantidad_producto')*(F('id_producto__precio_venta'))
+        )
+    )
 
     context = {
         'categoriasGanancias' : categoriasGanancias,
         'negocio' : negocio,
         'reporte': reporte,
         'fechaInicio' : fechaInicio,
-        'fechaFin' : fechaFin
+        'fechaFin' : fechaFin,
+        'ventaGanancia' : ventaGanancia
     }
 
-    return render(request, 'negocio_resumen_ventas.html', context)
+    return render(request, 'reportes_general_grupos.html', context)

@@ -1,0 +1,46 @@
+{% include 'partials/reportes_header_general.html' %}
+{% load humanize %}
+
+<div class="w3-container ">
+  <h5>SELECCIONE LA FECHA</h5>
+  <form action="/azptec/PuntoVenta/negocios/{{negocio}}/{{reporte}}/" method="post" >
+    {% csrf_token %}
+    <label for='fechaInicio'>Fecha inicio:</label>
+    <input type="date" name="fechaInicio" id='fechaInicio' value="{{fechaInicio}}">
+    <label for='fechaFin'>Fecha fin:</label>
+    <input type="date" name="fechaFin" id='fechaFin' value="{{fechaFin}}">
+    <input type="submit" value="Obtener reporte">
+  </form>
+</div>
+
+<div class="w3-container">
+
+  <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" id="loginTable">
+    <tr>
+      <th class="w3-border w3-center w3-gray" colspan="5">VENTAS</th>
+    </tr>
+    <tr >
+      <th class="w3-border">FECHA</th>
+      <th class="w3-border">GRUPO</th>
+      <th class="w3-border">UNIDADES VENDIDAS</th>
+      <th class="w3-border">TOTAL VENTA</th>
+      <th class="w3-border">TOTAL GANANCIA</th>
+    </tr>
+    {% for categoria in categoriasGanancias %}
+    <tr>
+       <td class="w3-border" >{{ categoria.dayGrouped|date:"Y/m/d" }}</td>
+       <td class="w3-border" >{{ categoria.id_producto__id_categoria__id_grupo__nombre_grupo }}</td>
+       <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace; ">{{ categoria.unidades_vendidas|floatformat:2|intcomma}}</td>
+       <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace;">${{ categoria.total_venta|floatformat:2|intcomma }}</td>
+       <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace;">${{ categoria.total_ganancia|floatformat:2|intcomma }}</td>
+    </tr>
+    {% endfor  %}
+    <tr>
+      <td colspan="3">Sub-totales:</td>
+      <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace; font-weight:bold">${{ ventaGanancia.total_venta|floatformat:2|intcomma}}</td>
+      <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace; font-weight:bold">${{ ventaGanancia.total_ganancia|floatformat:2|intcomma}}</td>
+    </tr>
+  </table>
+</div>
+
+{% include 'partials/reportes_footer.html' %}

@@ -1,0 +1,86 @@
+{% include 'partials/reportes_header_negocio.html' %}
+{% load humanize %}
+
+<div class="w3-container ">
+  <h5>SELECCIONE LA OPCION</h5>
+  <form action="/azptec/PuntoVenta/negocios/{{negocio}}/{{reporte}}/" method="post" id="formVenta">
+    {% csrf_token %}
+    {% if TipoAgrupacion == 'PorDia' or TipoAgrupacion == 'PorMes' or TipoAgrupacion == 'PorAno' %}
+    <input type="radio" id="radioRango2" name="radioRango" value="radioRango2" onchange="onSelectRadio2()" checked>
+    <label for='radioRango2'>Agrupado</label><br>
+    <select id="TipoAgrupacion" name="TipoAgrupacion" onchange="onSelectChange()" >
+      {% if TipoAgrupacion == 'PorDia' %}
+      <option value="PorDia" selected="PorDia">Por dia - mes actual</option>
+      <option value="PorMes">Por mes - año actual</option>
+      <option value="PorAno">Por año - todo</option>
+      {% endif %}
+      {% if TipoAgrupacion == 'PorMes' %}
+      <option value="PorDia">Por dia - mes actual</option>
+      <option value="PorMes" selected="PorMes">Por mes - año actual</option>
+      <option value="PorAno">Por año - todo</option>
+      {% endif %}
+      {% if TipoAgrupacion == 'PorAno' %}
+      <option value="PorDia">Por dia - mes actual</option>
+      <option value="PorMes">Por mes - año actual</option>
+      <option value="PorAno" selected="PorAno">Por año - todo</option>
+      {% endif %}
+    </select><br><br>
+    <input type="radio" id="radioRango1" name="radioRango" value="radioRango1" onchange="onSelectRadio1()"  >
+    <label for='radioRango1'>Por Rango - Agrupado por dia</label><br>
+    <label for='fechaInicio'>Fecha inicio:</label>
+    <input type="date" name="fechaInicio" id='fechaInicio' value="{{fechaInicio}}" disabled>
+    <label for='fechaFin'>Fecha fin:</label>
+    <input type="date" name="fechaFin" id='fechaFin' value="{{fechaFin}}" disabled>
+    <input type="submit" value="Obtener reporte" id="submitButton1" disabled><br><br>
+    {% endif %}
+    {% if TipoAgrupacion == 'PorRango' %}
+    <input type="radio" id="radioRango2" name="radioRango" value="radioRango2" onchange="onSelectRadio2()" >
+    <label for='radioRango2'>Agrupado</label><br>
+    <select id="TipoAgrupacion" name="TipoAgrupacion" onchange="onSelectChange()" disabled >
+      <option value="PorDia">Por dia - mes actual</option>
+      <option value="PorMes">Por mes - año actual</option>
+      <option value="PorAno">Por año - todo</option>
+    </select><br><br>
+    <input type="radio" id="radioRango1" name="radioRango" value="radioRango1" onchange="onSelectRadio1()" checked  >
+    <label for='radioRango1'>Por Rango - Agrupado por dia</label><br>
+    <label for='fechaInicio'>Fecha inicio:</label>
+    <input type="date" name="fechaInicio" id='fechaInicio' value="{{fechaInicio}}" >
+    <label for='fechaFin'>Fecha fin:</label>
+    <input type="date" name="fechaFin" id='fechaFin' value="{{fechaFin}}" >
+    <input type="submit" value="Obtener reporte" id="submitButton1" ><br><br>
+    {% endif %}
+  </form>
+</div>
+
+
+<div class="w3-container">
+  <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" id="loginTable">
+    <tr>
+      <th class="w3-border w3-center w3-gray" colspan="6">VENTAS</th>
+    </tr>
+    <tr >
+      <th class="w3-border" style="text-align:center">FECHA</th>
+      <th class="w3-border" style="text-align:center">TOTAL VENTA</th>
+      <th class="w3-border" style="text-align:center">TOTAL GANANCIA</th>
+    </tr>
+    {% for ganancia in ganancias %}
+    <tr>
+      {% if TipoAgrupacion == 'PorDia' or TipoAgrupacion == 'PorRango'  %}
+      <td class="w3-border" style="text-align:center">{{ ganancia.day|date:"Y/m/d" }}</td>
+      {% endif %}
+      {% if TipoAgrupacion == 'PorMes' %}
+      <td class="w3-border" style="text-align:center">{{ ganancia.day|date:"F Y" }}</td>
+      {% endif %}
+      {% if TipoAgrupacion == 'PorAno' %}
+      <td class="w3-border" style="text-align:center">{{ ganancia.day|date:"Y" }}</td>
+      {% endif %}
+      <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace;">${{ganancia.total_venta|floatformat:2|intcomma}}</td>
+      <td class="w3-border" style="text-align:right;font-family: Consolas, monaco, monospace;">${{ganancia.total_ganancia|floatformat:2|intcomma}}</td>
+    </tr>
+    {% endfor  %}
+  </table>
+</div>
+
+<br>
+
+{% include 'partials/reportes_footer.html' %}

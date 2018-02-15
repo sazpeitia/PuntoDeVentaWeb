@@ -1,0 +1,35 @@
+{% include 'partials/azptec_login_header.html' %}
+
+<div id="centrar">
+
+<h2>Ingresar a Punto de Venta AZPTEC</h2>
+
+<form  action="/azptec/PuntoVenta/login/" method="post">
+  {% csrf_token %}
+  <div class="imgcontainer">
+
+
+  </div>
+
+  <div class="container">
+    <label for="uname"><b>Usuario</b></label>
+    <input type="text" placeholder="Ingresar usuario" name="username" required>
+
+    <label for="psw"><b>Contraseña</b></label>
+    <input type="password" placeholder="Ingresar contraseña" name="password" required>
+
+    <button type="submit">Ingresar</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Recordarme
+    </label>
+
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn">Cancelar</button>
+    <span class="psw">¿Olvidaste tu <a href="#">contraseña?</a></span>
+  </div>
+</form>
+</div>
+
+{% include 'partials/azptec_login_footer.html' %}

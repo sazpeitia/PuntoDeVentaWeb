@@ -1,0 +1,20 @@
+{% include 'partials/azptec_login_header.html' %}
+
+<div id="centrar">
+
+<h2>Ingresar a Punto de Venta AZPTEC</h2>
+  <div class="imgcontainer">
+  </div>
+  <div class="container">
+    <strong>Ha cerrado sesión correctamemnte</strong>
+    <button type="button" onclick="redirectLogin()">Ingresar nuevamente</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+    function redirectLogin() {
+        location.href = "/azptec/PuntoVenta/login/";
+    }
+</script>
+
+{% include 'partials/azptec_login_footer.html' %}

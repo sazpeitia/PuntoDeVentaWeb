@@ -1,0 +1,19 @@
+{% include 'partials/reportes_header.html' %}
+
+<div class="w3-container w3-white w3-border">
+  {% if reporte == 'VENTAS_DIA'  %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/VENTAS_DIA/" class="w3-bar-item w3-button w3-padding w3-green">VENTAS</a>
+  {% else %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/VENTAS_DIA/" class="w3-bar-item w3-button w3-padding w3-white">VENTAS</a>
+  {% endif %}
+  {% if reporte == 'REPORTE_COMPRAS' %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/REPORTE_COMPRAS/" class="w3-bar-item w3-button w3-padding w3-green">PEDIDOS</a>
+  {% else %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/REPORTE_COMPRAS/" class="w3-bar-item w3-button w3-padding w3-white">PEDIDOS</a>
+  {% endif %}
+  {% if reporte == 'REPORTE_VETNAS' %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/REPORTE_VETNAS/" class="w3-bar-item w3-button w3-padding w3-green">RESUMEN</a>
+  {% else %}
+  <a href="/azptec/PuntoVenta/negocios/{{negocio}}/REPORTE_VETNAS/" class="w3-bar-item w3-button w3-padding w3-white">RESUMEN</a>
+  {% endif %}
+</div>
